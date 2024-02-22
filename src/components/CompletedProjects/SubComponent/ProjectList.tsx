@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import { useRef, useEffect } from "react";
 
-import { IProjectResult } from "../../interfaces/projectResult.interface";
+import { IProjectResult } from "../../../interfaces/projectResult.interface";
 
 import ProjectDetail from "./ProjectDetail";
 
@@ -20,9 +20,9 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects }) => {
   }, [projects]);
 
   return (
-    <Box mt={"5px"} mb={"5px"} ref={topRef}>
+    <Box ref={topRef}>
       {projects.map((project) => (
-        <ProjectDetail key={project.projectId} project={project} />
+        <ProjectDetail key={project.ProjectId} project={project} />
       ))}
     </Box>
   );

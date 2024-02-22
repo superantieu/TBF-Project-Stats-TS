@@ -9,7 +9,7 @@ import {
   useGetUserQuery,
 } from "../../services/ongoingApi.js";
 import { ICompletedProject } from "../../interfaces/projectTable.interface.js";
-import { ColumnDefExtended } from "../Dashboard/TableWithMore.js";
+import { ColumnDefExtended } from "../Dashboard/SubComponent/TableWithMore.js";
 import { IProjectResult } from "../../interfaces/projectResult.interface.js";
 
 import RenderThumb from "../../scrollbar/RenderThumb.js";
@@ -32,7 +32,7 @@ const UserDetail = () => {
     isError: isProjectError,
     isLoading,
   } = useGetOngoingProjectQuery({
-    Member: params.id,
+    member: params.id,
     pageNumber: page,
   });
   let data: ICompletedProject[] = [];
@@ -50,8 +50,8 @@ const UserDetail = () => {
         width: "290px",
       },
       {
-        id: "startDate",
-        accessorKey: "startDate",
+        id: "StartDate",
+        accessorKey: "StartDate",
         cell: ({ getValue }) => (
           <Text noOfLines={1} display={"block"}>
             {new Date(getValue() as string).toLocaleDateString("en-US", {
@@ -65,8 +65,8 @@ const UserDetail = () => {
         width: "160px",
       },
       {
-        id: "targetDate",
-        accessorKey: "targetDate",
+        id: "TargetDate",
+        accessorKey: "TargetDate",
         cell: ({ getValue }) => (
           <Text noOfLines={1} display={"block"}>
             {new Date(getValue() as string).toLocaleDateString("en-US", {
@@ -80,15 +80,17 @@ const UserDetail = () => {
         width: "160px",
       },
       {
-        id: "completedDate",
-        accessorKey: "completedDate",
+        id: "CompletedDate",
+        accessorKey: "CompletedDate",
         cell: ({ getValue }) => (
           <Text noOfLines={1} display={"block"}>
-            {new Date(getValue() as string).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })}
+            {getValue()
+              ? new Date(getValue() as string).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                })
+              : "On-going"}
           </Text>
         ),
         header: () => "Completed Date",
@@ -122,15 +124,12 @@ const UserDetail = () => {
 
   data = projectsByTMember?.result.map((pjMem: IProjectResult) => {
     return {
-      project: pjMem.projectName,
-      startDate: new Date(pjMem.startDate).getTime(),
-      targetDate: new Date(pjMem.targetDate).getTime(),
-      completedDate: new Date(pjMem.completedDate).getTime(),
-      members:
-        (pjMem.listmember.match(/\([^)]+\)/g) || []).length +
-        (pjMem.listLeader.match(/\([^)]+\)/g) || []).length +
-        (pjMem.listManager.match(/\([^)]+\)/g) || []).length,
-      target: pjMem.totalHours,
+      project: pjMem.ProjectName,
+      StartDate: new Date(pjMem.StartDate).getTime(),
+      TargetDate: new Date(pjMem.TargetDate).getTime(),
+      CompletedDate: new Date(pjMem.CompletedDate).getTime(),
+      members: pjMem.FilterMembers.length,
+      target: pjMem.TotalHours,
     };
   });
 
@@ -176,7 +175,7 @@ const UserDetail = () => {
         color={"#e7dede"}
       >
         <Text>
-          PROJECTS IN WHICH {user.result.fullName.toUpperCase()} PARTICIPATES
+          PROJECTS IN WHICH {user.result[0].FullName.toUpperCase()} PARTICIPATES
         </Text>
       </Flex>
       <Box>
@@ -185,7 +184,7 @@ const UserDetail = () => {
           data={data}
           setCurrent={setPage}
           project={projectsByTMember}
-          rowNavigate={{ path: "projectdetail", slug: "projectId" }}
+          rowNavigate={{ path: "projectdetail", slug: "ProjectId" }}
         />
       </Box>
     </Scrollbars>

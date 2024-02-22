@@ -1,7 +1,7 @@
 export interface IUsersResult {
-  userId: number;
-  fullName: string;
-  discipline: string;
-  jobTitle: string;
-  userHours: any;
+  UserId: number;
+  FullName: string;
+  Discipline: string;
+  JobTitle: string;
+  UserHours: any;
 }

@@ -22,33 +22,41 @@ import BasicModal from "../../Modal/BasicModel";
 import LoadingPage from "../../../pages/LoadingPage";
 
 interface TotalProjectChartProps {
-  orderBy: string;
+  sortColumn: string;
 }
 interface ContributeResult {
   members: number[];
   targetHours: number[];
-  listMembers: { [key: string]: FilterMember[] }[];
+  Listmembers: { [key: string]: FilterMember[] }[];
   categories: string[];
-  tasks: number[];
+  Tasks: number[];
 }
-const TotalProjectChart: React.FC<TotalProjectChartProps> = ({ orderBy }) => {
+const TotalProjectChart: React.FC<TotalProjectChartProps> = ({
+  sortColumn,
+}) => {
   const filter = useSelector(chooseSelector);
-  const valueFilter = filter.value.toString();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [direct, setDirect] = useState("");
   const [name, setName] = useState("");
-
   const {
     data: ongoProjects,
     error,
     isError,
     isLoading,
-  } = useGetOngoingProjectQuery({
-    Completed: false,
-    ChooseProject: valueFilter,
-    pageSize: filter.value.length < 10 ? 10 : filter.value.length,
-    orderBy,
-  });
+  } = useGetOngoingProjectQuery(
+    filter.value.length
+      ? {
+          isCompleted: 0,
+          chooseProject: JSON.stringify(filter.value),
+          pageSize: filter.value.length < 10 ? 10 : filter.value.length,
+          sortColumn,
+        }
+      : {
+          isCompleted: 0,
+          sortColumn,
+        }
+  );
   const toast = useToast();
 
   const contributeResult: ContributeResult = useMemo(() => {
@@ -60,32 +68,32 @@ const TotalProjectChart: React.FC<TotalProjectChartProps> = ({ orderBy }) => {
       const task = [] as number[];
       ongoProjects.result.map((x: IProjectResult) => {
         const numberOfTeam: { [key: string]: FilterMember[] } = groupbykey(
-          x.filterMembers,
-          "discipline"
+          x.FilterMembers,
+          "Discipline"
         );
-        mems.push(x.filterMembers.length);
-        hours.push(x.totalHours);
+        mems.push(x.FilterMembers.length);
+        hours.push(x.TotalHours);
         list.push(numberOfTeam);
-        category.push(x.projectName);
-        task.push(x.tasks);
+        category.push(x.ProjectName);
+        task.push(x.Tasks);
       });
       return {
         members: mems,
         targetHours: hours,
-        listMembers: list,
+        Listmembers: list,
         categories: category,
-        tasks: task,
+        Tasks: task,
       };
     }
     return {
       members: [],
       targetHours: [],
-      listMembers: [],
+      Listmembers: [],
       categories: [],
-      tasks: [],
+      Tasks: [],
     };
   }, [ongoProjects?.result]);
-  const detailMember = contributeResult.listMembers.map((array) => {
+  const detailMember = contributeResult.Listmembers.map((array) => {
     return Object.keys(array).map((arr) => {
       return `${arr} : ${array[arr].length}`;
     });
@@ -93,7 +101,7 @@ const TotalProjectChart: React.FC<TotalProjectChartProps> = ({ orderBy }) => {
   const series = [
     {
       name: "Task",
-      data: contributeResult.tasks,
+      data: contributeResult.Tasks,
     },
     {
       name: "Member",
@@ -114,9 +122,9 @@ const TotalProjectChart: React.FC<TotalProjectChartProps> = ({ orderBy }) => {
         dataPointSelection: (event, chart, options) => {
           if (event.button === 2) {
             const wantDirect =
-              ongoProjects.result[options.dataPointIndex]["projectId"];
+              ongoProjects.result[options.dataPointIndex]["ProjectId"];
             const wantName =
-              ongoProjects.result[options.dataPointIndex]["projectName"];
+              ongoProjects.result[options.dataPointIndex]["ProjectName"];
             setDirect(wantDirect);
             setName(wantName);
             onOpen();

@@ -5,7 +5,7 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 import { useGetOngoingProjectQuery } from "../../services/ongoingApi.js";
 
-import ProjectList from "./ProjectList.js";
+import ProjectList from "./SubComponent/ProjectList.js";
 import RenderThumb from "../../scrollbar/RenderThumb.js";
 import Pagination from "../Pagination/Pagination.js";
 import LoadingPage from "../../pages/LoadingPage.js";
@@ -21,7 +21,7 @@ const Projects = () => {
     isLoading,
   } = useGetOngoingProjectQuery({
     pageNumber: page,
-    Completed: true,
+    isCompleted: 1,
     pageSize: 10,
   });
   useEffect(() => {

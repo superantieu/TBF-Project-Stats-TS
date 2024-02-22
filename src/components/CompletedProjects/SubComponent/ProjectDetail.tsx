@@ -1,11 +1,13 @@
 import {
   Box,
-  Button,
   Divider,
   Flex,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
   Select,
   Text,
-  useOutsideClick,
   useToast,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
@@ -13,18 +15,19 @@ import { MdOutlineDateRange } from "react-icons/md";
 import { IoTimer } from "react-icons/io5";
 import { LuAlignHorizontalJustifyStart } from "react-icons/lu";
 import { GiFinishLine, GiTargetShot } from "react-icons/gi";
-import { useState, useRef, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
-import { useGetTimeSheetQuery } from "../../services/ongoingApi";
-import { IProjectResult } from "../../interfaces/projectResult.interface";
-import { ITimeSheetResult } from "../../interfaces/timeSheetResult.interface";
+import { useGetTimeSheetQuery } from "../../../services/ongoingApi";
+import { IProjectResult } from "../../../interfaces/projectResult.interface";
+import { ITimeSheetResult } from "../../../interfaces/timeSheetResult.interface";
+import { menuButtonStyle } from "../../../style/dashboardStyle";
 
-import Contribution from "../Charts/Contribution";
-import ContributeByPerson from "../Charts/ProjectDetailChart/ContribueByPerson";
-import ContributeByTask from "../Charts/ProjectDetailChart/ContributeByTask";
-import ContributeChart from "../Charts/ProjectDetailChart/ContributeChart";
-import LoadingPage from "../../pages/LoadingPage";
+import Contribution from "../../Charts/Contribution";
+import ContributeByPerson from "../../Charts/ProjectDetailChart/ContribueByPerson";
+import ContributeByTask from "../../Charts/ProjectDetailChart/ContributeByTask";
+import ContributeChart from "../../Charts/ProjectDetailChart/ContributeChart";
+import LoadingPage from "../../../pages/LoadingPage";
 import InforInsideDetail from "./InforInsideDetail";
 
 interface ProjectDetailProps {
@@ -33,7 +36,7 @@ interface ProjectDetailProps {
 export type DataForRender = { [key: string]: number };
 
 interface ChartData {
-  tshours: DataForRender;
+  TSHours: DataForRender;
   tstask: DataForRender;
   tsperson: DataForRender;
   teams: { [key: string]: string[] };
@@ -42,53 +45,44 @@ interface ChartData {
 const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
   const toast = useToast();
   const [contribute, setContribute] = useState("team");
-  const ref = useRef<HTMLSelectElement | null>(null);
-  const [isSelectOpen, setIsSelectOpen] = useState(false);
-
-  useOutsideClick({
-    ref: ref,
-    handler: () => setIsSelectOpen(false),
-  });
-
   const {
     data: timeSheetData,
     error,
     isError,
     isLoading,
   } = useGetTimeSheetQuery({
-    ProjectId: project.projectId,
-    pageSize: 5000,
+    projectId: project.ProjectId,
   });
   const chartData: ChartData = useMemo(() => {
     if (timeSheetData?.result) {
-      let tshour: DataForRender = {},
+      let TSHour: DataForRender = {},
         tstas: DataForRender = {},
         tsperso: DataForRender = {},
         team: { [key: string]: string[] } = {};
       timeSheetData.result.forEach((cur: ITimeSheetResult) => {
-        const needHoursTshour = tshour[cur["userDiscipline"]] || 0;
-        tshour[cur["userDiscipline"]] = needHoursTshour + cur["tshour"];
+        const needHoursTSHour = TSHour[cur["UserDiscipline"]] || 0;
+        TSHour[cur["UserDiscipline"]] = needHoursTSHour + cur["TSHour"];
 
-        const needHoursTstas = tstas[cur["taskId"]] || 0;
-        tstas[cur["taskId"]] = needHoursTstas + cur["tshour"];
+        const needHoursTstas = tstas[cur["TaskId"]] || 0;
+        tstas[cur["TaskId"]] = needHoursTstas + cur["TSHour"];
 
-        const needHoursTsperso = tsperso[cur["userName"]] || 0;
-        tsperso[cur["userName"]] = needHoursTsperso + cur["tshour"];
+        const needHoursTsperso = tsperso[cur["FullName"]] || 0;
+        tsperso[cur["FullName"]] = needHoursTsperso + cur["TSHour"];
 
-        const needArrTeam = team[cur["userDiscipline"]] || [];
-        team[cur["userDiscipline"]] = needArrTeam.includes(cur["userName"])
+        const needArrTeam = team[cur["UserDiscipline"]] || [];
+        team[cur["UserDiscipline"]] = needArrTeam.includes(cur["FullName"])
           ? needArrTeam
-          : [...needArrTeam, cur["userName"]];
+          : [...needArrTeam, cur["FullName"]];
       });
       return {
-        tshours: tshour,
+        TSHours: TSHour,
         tstask: tstas,
         tsperson: tsperso,
         teams: team,
       };
     }
     return {
-      tshours: {},
+      TSHours: {},
       tstask: {},
       tsperson: {},
       teams: {},
@@ -126,18 +120,18 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
         fontSize={"24px"}
         padding={"10px"}
       >
-        {project.projectName.toUpperCase()}
+        {project.ProjectName.toUpperCase()}
       </Flex>
       <Flex justify={"space-between"} mr={"10px"} mt={"20px"}>
         <InforInsideDetail
           text={"Used"}
-          value={`${project.usedHours} HOURS`}
+          value={`${project.UsedHours} HOURS`}
           icon={<IoTimer fontSize={"36px"} />}
         />
 
         <InforInsideDetail
           text={"StartDate"}
-          value={new Date(project.startDate).toLocaleDateString("en-US", {
+          value={new Date(project.StartDate).toLocaleDateString("en-US", {
             year: "numeric",
             month: "2-digit",
             day: "2-digit",
@@ -145,10 +139,10 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
           icon={<LuAlignHorizontalJustifyStart fontSize={"36px"} />}
         />
 
-        {project.completedDate ? (
+        {project.CompletedDate ? (
           <InforInsideDetail
             text={"FinishDate"}
-            value={new Date(project.completedDate).toLocaleDateString("en-US", {
+            value={new Date(project.CompletedDate).toLocaleDateString("en-US", {
               year: "numeric",
               month: "2-digit",
               day: "2-digit",
@@ -158,7 +152,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
         ) : (
           <InforInsideDetail
             text={"TargetDate"}
-            value={new Date(project.targetDate).toLocaleDateString("en-US", {
+            value={new Date(project.TargetDate).toLocaleDateString("en-US", {
               year: "numeric",
               month: "2-digit",
               day: "2-digit",
@@ -169,7 +163,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
 
         <InforInsideDetail
           text={"Target"}
-          value={`${project.totalHours} HOURS`}
+          value={`${project.TotalHours} HOURS`}
           icon={<GiTargetShot fontSize={"36px"} />}
         />
       </Flex>
@@ -191,39 +185,31 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
           borderRadius={"20px"}
           border={"2px solid #7d7373"}
         >
-          <Button
-            position={"absolute"}
-            top={0}
-            right={0}
-            w={"40px"}
-            height={"40px"}
-            borderRadius={"50%"}
-            _hover={{ bg: "transparent" }}
-            bg={"transparent"}
-            onClick={() => setIsSelectOpen(true)}
-          >
-            <HamburgerIcon color={"#e7dede"} />
-          </Button>
-          <Select
-            ref={ref}
-            icon={<></>}
-            mt={4}
-            position={"absolute"}
-            right={0}
-            top={"20px"}
-            bg={"#c9d2dd"}
-            border={"1px solid #e7dede"}
-            w={"110px"}
-            height={"30px"}
-            zIndex={"2"}
-            onChange={handleSelectChart}
-            display={isSelectOpen ? "block" : "none"}
-          >
-            <option value="team">TEAM</option>
-            <option value="person">PERSON</option>
-            <option value="task">TASK</option>
-          </Select>
-
+          <Menu closeOnSelect={false}>
+            <MenuButton
+              as={IconButton}
+              fontSize={"18px"}
+              icon={<HamburgerIcon />}
+              {...menuButtonStyle}
+              position={"absolute"}
+              top={2}
+              right={2}
+            />
+            <MenuList minW={"30px"} h={"30px"}>
+              <Select
+                icon={<></>}
+                zIndex={2}
+                minW={"110px"}
+                height={"30px"}
+                mt={"-8px"}
+                onChange={handleSelectChart}
+              >
+                <option value="team">TEAM</option>
+                <option value="person">PERSON</option>
+                <option value="task">TASK</option>
+              </Select>
+            </MenuList>
+          </Menu>
           <Flex
             flexDirection={"column"}
             align={"flex-start"}
@@ -235,7 +221,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
               {isLoading ? (
                 <LoadingPage />
               ) : contribute === "team" ? (
-                <ContributeChart totalhour={chartData.tshours} />
+                <ContributeChart totalhour={chartData.TSHours} />
               ) : contribute === "task" ? (
                 <ContributeByTask taskhour={chartData.tstask} />
               ) : (

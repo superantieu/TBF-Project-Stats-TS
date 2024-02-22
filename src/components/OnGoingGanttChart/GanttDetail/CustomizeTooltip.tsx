@@ -46,7 +46,7 @@ const CustomizeTooltip: React.FC<CustomizeTooltipProps> = ({
         {" day(s)"}
       </Text>
       <Text>{!!task.progress && `Progress: ${task.progress} %`}</Text>
-      <Text>TotalHours: {task.totalhours}</Text>
+      <Text>TotalHours: {task.TotalHours}</Text>
       <Text>Members: {task.member.length}</Text>
     </Stack>
   );

@@ -21,7 +21,7 @@ import Scrollbars from "react-custom-scrollbars-2";
 import { useState } from "react";
 
 import { TableForDisciplineProps } from "../../interfaces/tableForDiscipline.interface";
-import { ColumnDefExtended } from "../Dashboard/TableWithMore";
+import { ColumnDefExtended } from "../Dashboard/SubComponent/TableWithMore";
 import { ICompletedProject } from "../../interfaces/projectTable.interface";
 import { IProjectResult } from "../../interfaces/projectResult.interface";
 
@@ -57,6 +57,7 @@ const ProjectListTable: React.FC<TableForDisciplineProps> = ({
       }`
     );
   };
+  console.log("project", project);
   return (
     <Box mt={"30px"}>
       <Flex

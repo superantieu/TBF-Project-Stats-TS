@@ -3,12 +3,13 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const ongoingApi = createApi({
   reducerPath: "ongoingApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5103/api/",
+    baseUrl: "http://localhost:3000/api/",
   }),
   endpoints: (builder) => ({
     getOngoingProject: builder.query({
       query: (params) => ({
-        url: `Projects`,
+        // url: `project/specific/selectproject`,
+        url: `project`,
         params,
       }),
     }),
@@ -18,48 +19,56 @@ export const ongoingApi = createApi({
         params,
       }),
     }),
-    getSpecificProject: builder.query({
-      query: (params) => ({
-        url: `Projects/${params}`,
-      }),
-    }),
     getCompactProject: builder.query({
       query: (params) => ({
-        url: `Projects/Compact`,
+        // url: `project/specific/compact`,
+        url: `project/compact`,
         params,
       }),
     }),
     getTimeSheet: builder.query({
       query: (params) => ({
-        url: `TimeSheet`,
+        // url: `timesheet/timesheet/project`,
+        url: `timesheet/project`,
         params,
-      }),
-    }),
-    getUser: builder.query({
-      query: (params) => ({
-        url: `Users/${params}`,
       }),
     }),
     getTask: builder.query({
       query: (params) => ({
-        url: `Tasks/${params}`,
+        // url: `task/task/specific/${params}`,
+        url: `task/specific/${params}`,
       }),
     }),
     getAllTasks: builder.query({
       query: (params) => ({
-        url: `Tasks`,
-        params,
-      }),
-    }),
-    getAllUsers: builder.query({
-      query: (params) => ({
-        url: `Users`,
+        url: `tasks`,
         params,
       }),
     }),
     getDiscipline: builder.query({
       query: (params) => ({
-        url: `Tasks/Discipline`,
+        // url: `task/task/discipline`,
+        url: `task/discipline/search`,
+        params,
+      }),
+    }),
+    getUser: builder.query({
+      query: (params) => ({
+        // url: `employee/${params}`,
+        url: `users/${params}`,
+      }),
+    }),
+    getAllUsers: builder.query({
+      query: (params) => ({
+        // url: `employee`,
+        url: `users`,
+        params,
+      }),
+    }),
+    runDev: builder.query({
+      query: (params) => ({
+        // url: `employee`,
+        url: `command/rundev`,
         params,
       }),
     }),
@@ -70,11 +79,11 @@ export const {
   useGetOngoingProjectQuery,
   useGetCompactProjectQuery,
   useGetTimeSheetQuery,
-  useGetSpecificProjectQuery,
   useGetUserQuery,
   useGetTaskQuery,
   useGetAllTasksQuery,
   useGetAllUsersQuery,
   useGetDisciplineQuery,
   useGetSearchProjectQuery,
+  useRunDevQuery,
 } = ongoingApi;

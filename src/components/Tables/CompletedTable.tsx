@@ -7,8 +7,6 @@ import {
   Td,
   Th,
   Tr,
-  Divider,
-  AbsoluteCenter,
   Flex,
 } from "@chakra-ui/react";
 import { BaseSyntheticEvent, useState } from "react";
@@ -21,13 +19,14 @@ import {
 } from "@tanstack/react-table";
 import Scrollbars from "react-custom-scrollbars-2";
 
-import { ColumnDefExtended } from "../Dashboard/TableWithMore";
+import { ColumnDefExtended } from "../Dashboard/SubComponent/TableWithMore";
 import { TableWithPaginationProps } from "../../interfaces/tableWithNavigate.interface";
 import { ICompletedProject } from "../../interfaces/projectTable.interface";
 
 import Pagination from "../Pagination/Pagination";
 import ExpectTimeChart from "../Charts/DashBoardChart/ExpectTimeChart";
 import RenderThumb from "../../scrollbar/RenderThumb";
+import Divide from "../Dashboard/SubComponent/Divide";
 
 const TableWithPagination: React.FC<TableWithPaginationProps> = ({
   columns,
@@ -55,17 +54,7 @@ const TableWithPagination: React.FC<TableWithPaginationProps> = ({
   };
   return (
     <Box mt={"30px"}>
-      <Box position="relative" padding="10">
-        <Divider borderColor={"red.500"} />
-        <AbsoluteCenter
-          bg="red.500"
-          color={"white"}
-          px="8"
-          borderRadius={"99px"}
-        >
-          COMPLETED PROJECTS
-        </AbsoluteCenter>
-      </Box>
+      <Divide title={"COMPLETED PROJECTS"} />
       <Box
         bg={"#08040459"}
         borderRadius={"20px"}

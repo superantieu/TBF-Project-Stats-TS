@@ -17,7 +17,7 @@ import BasicModal from "../../Modal/BasicModel";
 import LoadingPage from "../../../pages/LoadingPage";
 
 export type TasksExtended = Task & {
-  totalhours: number;
+  TotalHours: number;
   member: FilterMember[];
 };
 
@@ -46,48 +46,48 @@ const GanttChartRender = () => {
     isError,
     isLoading,
   } = useGetOngoingProjectQuery({
-    Completed: false,
+    isCompleted: 0,
     pageSize: 50,
   });
   const toast = useToast();
-  const tasks = useMemo(() => {
+  const Tasks = useMemo(() => {
     const temp: TasksExtended[] = [
       {
         start: new Date(Date.now() - 10000),
         end: new Date(),
         name: "",
-        id: "dt.projectId",
+        id: "dt.ProjectId",
         progress: 100,
         type: "project",
         hideChildren: false,
         displayOrder: 1, // Vị trí hàng trên gantt chart
-        totalhours: 1,
+        TotalHours: 1,
         member: [],
       },
     ];
     ganttChart?.result &&
       (ganttChart.result as IProjectResult[]).forEach((dt, index) => {
         const data: TasksExtended = {
-          start: new Date(dt.startDate),
-          end: new Date(dt.targetDate),
-          name: dt.projectName,
-          id: dt.projectId,
+          start: new Date(dt.StartDate),
+          end: new Date(dt.TargetDate),
+          name: dt.ProjectName,
+          id: dt.ProjectId,
           progress: Math.round(
-            (100 * (new Date().getTime() - new Date(dt.startDate).getTime())) /
-              (new Date(dt.targetDate).getTime() -
-                new Date(dt.startDate).getTime())
+            (100 * (new Date().getTime() - new Date(dt.StartDate).getTime())) /
+              (new Date(dt.TargetDate).getTime() -
+                new Date(dt.StartDate).getTime())
           ),
           type: "project",
           hideChildren: false,
           displayOrder: index + 1, // Vị trí hàng trên gantt chart
-          totalhours: dt.totalHours,
-          member: dt.filterMembers,
+          TotalHours: dt.TotalHours,
+          member: dt.FilterMembers,
         };
         if (discip === "") {
           temp.push(data);
         } else {
-          const isValid = dt.filterMembers.some(
-            (member) => member.discipline === discip
+          const isValid = dt.FilterMembers.some(
+            (member) => member.Discipline === discip
           );
           if (isValid) {
             temp.push(data);
@@ -103,28 +103,6 @@ const GanttChartRender = () => {
   const handleDisciplineChange = (disc: string) => {
     setDiscip(disc);
   };
-
-  // const getStartEndDateForProject = (
-  //   tasks: TasksExtended[],
-  //   projectId: string
-  // ) => {
-  //   const projectTasks = tasks.filter(
-  //     (t: TasksExtended) => t.project === projectId
-  //   );
-  //   let start = projectTasks[0].start;
-  //   let end = projectTasks[0].end;
-
-  //   for (let i = 0; i < projectTasks.length; i++) {
-  //     const task = projectTasks[i];
-  //     if (start.getTime() > task.start.getTime()) {
-  //       start = task.start;
-  //     }
-  //     if (end.getTime() < task.end.getTime()) {
-  //       end = task.end;
-  //     }
-  //   }
-  //   return [start, end];
-  // };
 
   const handleDblClick = (task: Task) => {
     setDirect(task.id);
@@ -165,7 +143,7 @@ const GanttChartRender = () => {
           name={name}
         />
         <MemoGantt
-          tasks={tasks}
+          tasks={Tasks}
           viewMode={view}
           onDoubleClick={handleDblClick}
           listCellWidth={isChecked ? "100px" : ""}

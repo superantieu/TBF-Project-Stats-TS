@@ -5,32 +5,32 @@ import { FetchBaseQueryError, skipToken } from "@reduxjs/toolkit/query";
 
 import { ICompletedProject } from "../../interfaces/projectTable.interface";
 import { IUsersResult } from "../../interfaces/usersResult.interface";
-import { ColumnDefExtended } from "../Dashboard/TableWithMore";
+import { ColumnDefExtended } from "../Dashboard/SubComponent/TableWithMore";
 
 import ProjectListTable from "../Tables/ProjectListTable";
 import LoadingPage from "../../pages/LoadingPage";
 
 interface DisciplineMemberTableProps {
-  discipline: string;
+  Discipline: string;
 }
 
 const DisciplineMemberTable: React.FC<DisciplineMemberTableProps> = ({
-  discipline,
+  Discipline,
 }) => {
   const toast = useToast();
   const [page, setPage] = useState(1);
 
   const {
-    data: disciplineMember,
+    data: DisciplineMember,
     error,
     isError,
     isLoading,
   } = useGetAllUsersQuery(
-    discipline
+    Discipline
       ? {
-          Discipline: discipline,
+          discipline: Discipline,
           pageNumber: page,
-          Employed: 1,
+          employed: 1,
         }
       : skipToken
   );
@@ -39,8 +39,8 @@ const DisciplineMemberTable: React.FC<DisciplineMemberTableProps> = ({
   const columns = useMemo<ColumnDefExtended<ICompletedProject>[]>(
     () => [
       {
-        id: "userId",
-        accessorKey: "userId",
+        id: "UserId",
+        accessorKey: "UserId",
         cell: ({ getValue }) => (
           <Text noOfLines={1} display={"block"}>
             {getValue() as string}
@@ -50,8 +50,8 @@ const DisciplineMemberTable: React.FC<DisciplineMemberTableProps> = ({
         width: "120px",
       },
       {
-        id: "fullName",
-        accessorKey: "fullName",
+        id: "FullName",
+        accessorKey: "FullName",
         cell: ({ getValue }) => (
           <Text noOfLines={1} display={"block"}>
             {getValue() as string}
@@ -61,8 +61,8 @@ const DisciplineMemberTable: React.FC<DisciplineMemberTableProps> = ({
         width: "200px",
       },
       {
-        id: "jobTitle",
-        accessorKey: "jobTitle",
+        id: "JobTitle",
+        accessorKey: "JobTitle",
         cell: ({ getValue }) => (
           <Text noOfLines={1} display={"block"}>
             {getValue() as string}
@@ -75,11 +75,11 @@ const DisciplineMemberTable: React.FC<DisciplineMemberTableProps> = ({
     []
   );
 
-  data = disciplineMember.result.map((member: IUsersResult) => {
+  data = DisciplineMember?.result.map((member: IUsersResult) => {
     return {
-      userId: member.userId,
-      fullName: member.fullName,
-      jobTitle: member.jobTitle,
+      UserId: member.UserId,
+      FullName: member.FullName,
+      JobTitle: member.JobTitle,
     };
   });
 
@@ -105,8 +105,8 @@ const DisciplineMemberTable: React.FC<DisciplineMemberTableProps> = ({
         columns={columns}
         data={data}
         setCurrent={setPage}
-        project={disciplineMember}
-        rowNavigate={{ path: "users", slug: "userId" }}
+        project={DisciplineMember}
+        rowNavigate={{ path: "users", slug: "UserId" }}
       />
     </Box>
   );

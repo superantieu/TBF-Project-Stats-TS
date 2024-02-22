@@ -1,34 +1,25 @@
 import { useToast } from "@chakra-ui/react";
 import { useEffect } from "react";
 
+import countToChartData from "../../../utility/countToChartData";
 import { RTKQueryProps } from "../../../interfaces/rtkQueryAPI.interface";
 
 import ContributeChart from "../ProjectDetailChart/ContributeChart";
 import LoadingPage from "../../../pages/LoadingPage";
 
 type ContributeLocationProps = RTKQueryProps & {
-  location: string[];
+  Location: string[];
 };
 
 const ContributeLocation: React.FC<ContributeLocationProps> = ({
-  location,
+  Location,
   error,
   isError,
   isLoading,
 }) => {
   const toast = useToast();
 
-  let countLoca: { [key: string]: number } = {};
-
-  location.forEach((loca) => {
-    if (countLoca[loca]) {
-      countLoca[loca]++;
-    } else {
-      countLoca[loca] = 1;
-    }
-    return countLoca;
-  });
-
+  const countLoca = countToChartData(Location);
   let otherCount = 0;
   for (var key in countLoca) {
     if (countLoca.hasOwnProperty(key)) {

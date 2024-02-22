@@ -1,7 +1,7 @@
 import ReactApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 
-import { DataForRender } from "../../CompletedProjects/ProjectDetail";
+import { DataForRender } from "../../CompletedProjects/SubComponent/ProjectDetail";
 
 interface ContributeChartProps {
   totalhour: DataForRender;

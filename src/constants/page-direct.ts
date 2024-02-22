@@ -1,13 +1,20 @@
 export const DIRECT_OPTION: { [key: string]: { [key: string]: string } } = {
-  Projects: {
+  // "project/specific/selectproject": {
+  project: {
     direct: "/projectdetail/",
-    name: "projectName",
-    id: "projectId",
+    name: "ProjectName",
+    id: "ProjectId",
   },
-  Users: { direct: "/users/", name: "fullName", id: "userId" },
-  "Tasks/Discipline": {
-    direct: "/discipline/",
-    name: "taskDiscipline",
-    id: "taskDiscipline",
+  // employee: {
+  users: {
+    direct: "/users/",
+    name: "FullName",
+    id: "UserId",
+  },
+  // "task/task/discipline": {
+  "task/discipline/search": {
+    direct: "/Discipline/",
+    name: "TaskDiscipline",
+    id: "TaskDiscipline",
   },
 };

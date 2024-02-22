@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 import { useGetOngoingProjectQuery } from "../../services/ongoingApi.js";
-import { ColumnDefExtended } from "../Dashboard/TableWithMore.js";
+import { ColumnDefExtended } from "../Dashboard/SubComponent/TableWithMore.js";
 import { ICompletedProject } from "../../interfaces/projectTable.interface.js";
 import { IProjectResult } from "../../interfaces/projectResult.interface.js";
 
@@ -25,11 +25,10 @@ const TeamProject = () => {
     isError,
     isLoading,
   } = useGetOngoingProjectQuery({
-    Discipline: params.name,
-    pageNumberDiscipline: page,
-    pageSize: 400,
+    discipline: params.name,
+    pageNumber: page,
   });
-
+  console.log("team", projectsByTeam);
   let data: ICompletedProject[] = [];
   const columns = useMemo<ColumnDefExtended<ICompletedProject>[]>(
     () => [
@@ -45,8 +44,8 @@ const TeamProject = () => {
         width: "290px",
       },
       {
-        id: "startDate",
-        accessorKey: "startDate",
+        id: "StartDate",
+        accessorKey: "StartDate",
         cell: ({ getValue }) => (
           <Text noOfLines={1} display={"block"}>
             {new Date(getValue() as string).toLocaleDateString("en-US", {
@@ -60,8 +59,8 @@ const TeamProject = () => {
         width: "160px",
       },
       {
-        id: "targetDate",
-        accessorKey: "targetDate",
+        id: "TargetDate",
+        accessorKey: "TargetDate",
         cell: ({ getValue }) => (
           <Text noOfLines={1} display={"block"}>
             {new Date(getValue() as string).toLocaleDateString("en-US", {
@@ -75,15 +74,17 @@ const TeamProject = () => {
         width: "160px",
       },
       {
-        id: "completedDate",
-        accessorKey: "completedDate",
+        id: "CompletedDate",
+        accessorKey: "CompletedDate",
         cell: ({ getValue }) => (
           <Text noOfLines={1} display={"block"}>
-            {new Date(getValue() as string).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-            })}
+            {getValue()
+              ? new Date(getValue() as string).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                })
+              : "On-going"}
           </Text>
         ),
         header: () => "Completed Date",
@@ -115,17 +116,14 @@ const TeamProject = () => {
     []
   );
 
-  data = projectsByTeam.result.map((pjTeam: IProjectResult) => {
+  data = projectsByTeam?.result.map((pjTeam: IProjectResult) => {
     return {
-      project: pjTeam.projectName,
-      startDate: new Date(pjTeam.startDate).getTime(),
-      targetDate: new Date(pjTeam.targetDate).getTime(),
-      completedDate: new Date(pjTeam.completedDate).getTime(),
-      members:
-        (pjTeam.listmember.match(/\([^)]+\)/g) || []).length +
-        (pjTeam.listLeader.match(/\([^)]+\)/g) || []).length +
-        (pjTeam.listManager.match(/\([^)]+\)/g) || []).length,
-      target: pjTeam.totalHours,
+      project: pjTeam.ProjectName,
+      StartDate: new Date(pjTeam.StartDate).getTime(),
+      TargetDate: new Date(pjTeam.TargetDate).getTime(),
+      CompletedDate: new Date(pjTeam.CompletedDate).getTime(),
+      members: pjTeam.FilterMembers.length,
+      target: pjTeam.TotalHours,
     };
   });
 
@@ -166,7 +164,7 @@ const TeamProject = () => {
           DISCIPLINE
         </Text>
       </Flex>
-      <DisciplineMemberTable discipline={params.name as string} />
+      <DisciplineMemberTable Discipline={params.name as string} />
       <Flex
         mt={"20px"}
         mb={"20px"}
@@ -187,7 +185,7 @@ const TeamProject = () => {
           data={data}
           setCurrent={setPage}
           project={projectsByTeam}
-          rowNavigate={{ path: "projectdetail", slug: "projectId" }}
+          rowNavigate={{ path: "projectdetail", slug: "ProjectId" }}
         />
       </Box>
     </Scrollbars>

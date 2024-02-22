@@ -4,9 +4,9 @@ import { useToast } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
-import { useGetSpecificProjectQuery } from "../../services/ongoingApi.js";
+import { useGetOngoingProjectQuery } from "../../services/ongoingApi.js";
 
-import ProjectList from "../CompletedProjects/ProjectList.js";
+import ProjectList from "../CompletedProjects/SubComponent/ProjectList.js";
 import RenderThumb from "../../scrollbar/RenderThumb.js";
 import LoadingPage from "../../pages/LoadingPage.js";
 
@@ -18,7 +18,9 @@ const SpecificProject = () => {
     error,
     isError,
     isLoading,
-  } = useGetSpecificProjectQuery(params.id);
+  } = useGetOngoingProjectQuery({
+    projectId: params.id,
+  });
 
   useEffect(() => {
     if (isError) {
@@ -43,7 +45,7 @@ const SpecificProject = () => {
       style={{ backgroundColor: "#272a2f" }}
       renderThumbVertical={RenderThumb}
     >
-      <ProjectList projects={[specificProjects.result]} />
+      <ProjectList projects={specificProjects.result} />
     </Scrollbars>
   );
 };

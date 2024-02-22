@@ -1,26 +1,26 @@
 export interface FilterMember {
-  discipline: string;
-  fullName: string;
-  jobTitle: string;
-  userHours: number;
-  userId: number;
+  Discipline: string;
+  FullName: string;
+  JobTitle: string;
+  UserHours: number;
+  UserId: number;
 }
 
 export interface IProjectResult {
-  completedDate: string;
-  difficulty: string;
-  filterMembers: FilterMember[];
-  floorAreas: number;
-  listLeader: string;
-  listManager: string;
-  listmember: string;
-  location: string;
-  projectId: string;
-  projectName: string;
-  size: string;
-  startDate: string;
-  targetDate: string;
-  tasks: number;
-  totalHours: number;
-  usedHours: number;
+  CompletedDate: string;
+  Difficulty: string;
+  FilterMembers: FilterMember[];
+  FloorAreas: number;
+  ListLeader: string;
+  ListManager: string;
+  Listmember: string;
+  Location: string;
+  ProjectId: string;
+  ProjectName: string;
+  Size: string;
+  StartDate: string;
+  TargetDate: string;
+  Tasks: number;
+  TotalHours: number;
+  UsedHours: number;
 }

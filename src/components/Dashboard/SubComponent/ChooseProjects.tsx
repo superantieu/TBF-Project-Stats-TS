@@ -12,13 +12,14 @@ import {
 } from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
 import Scrollbars from "react-custom-scrollbars-2";
-
-import { useGetCompactProjectQuery } from "../../services/ongoingApi";
-import { IProjectResult } from "../../interfaces/projectResult.interface";
-import { setChoose } from "../../redux/chooseSlice";
-import LoadingPage from "../../pages/LoadingPage";
-import { useEffect } from "react";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { useEffect } from "react";
+
+import { useGetCompactProjectQuery } from "../../../services/ongoingApi";
+import { IProjectResult } from "../../../interfaces/projectResult.interface";
+import { setChoose } from "../../../redux/chooseSlice";
+
+import LoadingPage from "../../../pages/LoadingPage";
 
 function CustomCheckbox(props: UseCheckboxProps) {
   const { state, getCheckboxProps, getInputProps, getLabelProps, htmlProps } =
@@ -64,14 +65,13 @@ function ChooseProjects() {
   const { value, getCheckboxProps, setValue } = useCheckboxGroup({
     defaultValue: [],
   });
+  console.log("before", value);
   const {
     data: ongoCompactProjects,
     error,
     isError,
     isLoading: compactLoading,
-  } = useGetCompactProjectQuery({
-    pageSize: 50,
-  });
+  } = useGetCompactProjectQuery({});
   const handleClick = () => {
     dispatch(setChoose(value));
   };
@@ -111,14 +111,14 @@ function ChooseProjects() {
           backgroundColor: "#fff",
         }}
       >
-        {(ongoCompactProjects?.result as IProjectResult[]).map(
+        {(ongoCompactProjects?.result as IProjectResult[])?.map(
           (compactproject, index) => {
             return (
               <Box padding={"1px"} mr={"10px"} key={index}>
                 <CustomCheckbox
                   {...getCheckboxProps({
-                    value: compactproject.projectId,
-                    name: compactproject.projectName,
+                    value: compactproject.ProjectId,
+                    name: compactproject.ProjectName,
                   })}
                 />
               </Box>

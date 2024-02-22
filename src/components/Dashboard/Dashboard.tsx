@@ -1,14 +1,11 @@
 import { Scrollbars } from "react-custom-scrollbars-2";
 import {
-  Divider,
-  AbsoluteCenter,
   Flex,
   Switch,
   FormControl,
   FormLabel,
   Box,
   Text,
-  useOutsideClick,
   Menu,
   MenuButton,
   MenuList,
@@ -18,7 +15,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
@@ -35,12 +32,13 @@ import {
 
 import TotalProjectChart from "../Charts/DashBoardChart/TotalProjectChart";
 import RenderThumb from "../../scrollbar/RenderThumb";
-import StatsOverall from "./StatsOverall";
-import TableMore from "./TableWithMore";
+import StatsOverall from "./SubComponent/StatsOverall";
+import TableMore from "./SubComponent/TableWithMore";
 import ContributeLocation from "../Charts/DashBoardChart/ContributeLocation";
 import ContributeBySize from "../Charts/DashBoardChart/ContributeBySize";
 import ContributeByDifficulty from "../Charts/DashBoardChart/ContributeByDifficulty";
-import ChooseProjects from "./ChooseProjects";
+import ChooseProjects from "./SubComponent/ChooseProjects";
+import Divide from "./SubComponent/Divide";
 
 interface AdditionChart {
   locateChart: string[];
@@ -49,22 +47,12 @@ interface AdditionChart {
 }
 
 const Dashboard = () => {
-  const [enable, setEnable] = useState<{
-    locate: boolean;
-    size: boolean;
-    difficulty: boolean;
-  }>({
+  const [enable, setEnable] = useState({
     locate: false,
     size: false,
     difficulty: false,
   });
   const [orderBy, setOrderBy] = useState("");
-  const [isSelectOpen, setIsSelectOpen] = useState(false);
-  const ref = useRef<HTMLDivElement | null>(null);
-  useOutsideClick({
-    ref: ref,
-    handler: () => setIsSelectOpen(false),
-  });
   const dispatch = useDispatch();
   //
   const {
@@ -73,21 +61,19 @@ const Dashboard = () => {
     isError,
     isLoading,
   } = useGetOngoingProjectQuery({
-    Completed: false,
+    isCompleted: 0,
     pageSize: 50,
   });
-
   //
-
   const additionChart: AdditionChart = useMemo(() => {
     if (totalOngoProjects?.result) {
       const locateChartt = [] as string[];
       const sizeChartt = [] as string[];
       const difficultyChartt = [] as string[];
       (totalOngoProjects.result as IProjectResult[]).map((totalOngo) => {
-        locateChartt.push(totalOngo.location);
-        sizeChartt.push(totalOngo.size);
-        difficultyChartt.push(totalOngo.difficulty);
+        locateChartt.push(totalOngo.Location);
+        sizeChartt.push(totalOngo.Size);
+        difficultyChartt.push(totalOngo.Difficulty);
       });
       return {
         locateChart: locateChartt,
@@ -124,21 +110,107 @@ const Dashboard = () => {
       }}
       renderThumbVertical={RenderThumb}
     >
-      <Box w={"full"} h={"full"} mt={"20px"} mb={"20px"}>
-        <Box position="relative" padding="10">
-          <Divider borderColor={"red.500"} />
-          <AbsoluteCenter
-            bg="red.500"
-            color={"white"}
-            px="8"
-            borderRadius={"99px"}
-          >
-            ON-GOING PROJECTS
-          </AbsoluteCenter>
-        </Box>
+      <Box w={"full"} h={"full"} mt={"20px"} mb={"20px"} position={"relative"}>
+        <Divide title={"ON-GOING PROJECTS"} />
 
+        <Flex
+          justify={"space-between"}
+          align={"center"}
+          gap={"60px 40px"}
+          m={"0 20px 10px"}
+          flexWrap={"wrap"}
+        >
+          <Box
+            w={"100%"}
+            bg={"#08040459"}
+            borderRadius={"20px"}
+            minH={"515px"}
+            position={"relative"}
+            onContextMenu={handleContextMenu}
+          >
+            <TotalProjectChart
+              sortColumn={orderBy === "" ? "StartDate" : orderBy}
+            />
+            <Menu closeOnSelect={false}>
+              <MenuButton
+                {...menuButtonStyle}
+                as={Button}
+                border={"1px solid #fff"}
+                borderRadius={"15px"}
+                padding={"5px"}
+                h={"30px"}
+                position={"absolute"}
+                bottom={"10px"}
+                left={"-10px"}
+              >
+                Choose
+              </MenuButton>
+
+              <MenuList maxW={"1000px"} zIndex={99}>
+                <MenuItem>
+                  <Text fontSize={"16px"} fontWeight={"bold"}>
+                    Choose the projects you want to display
+                  </Text>
+                </MenuItem>
+                <ChooseProjects />
+              </MenuList>
+            </Menu>
+            <Select
+              position="absolute"
+              onChange={handlleSelect}
+              {...selectStyle}
+            >
+              <option value="StartDate">Newest</option>
+              <option value="StartDate desc">Oldest</option>
+            </Select>
+          </Box>
+          {enable.locate && (
+            <Flex {...enableChartStyle} flexDirection="column">
+              <Box>
+                <ContributeLocation
+                  Location={additionChart.locateChart}
+                  error={error as FetchBaseQueryError}
+                  isError={isError}
+                  isLoading={isLoading}
+                />
+              </Box>
+              <Text {...chartTitleStyle}>THE CONTRIBUTION BY Location</Text>
+            </Flex>
+          )}
+          {enable.size && (
+            <Flex {...enableChartStyle} flexDirection="column">
+              <Box>
+                <ContributeBySize
+                  size={additionChart.sizeChart}
+                  error={error as FetchBaseQueryError}
+                  isError={isError}
+                  isLoading={isLoading}
+                />
+              </Box>
+              <Text {...chartTitleStyle}>THE CONTRIBUTION BY PROJECT size</Text>
+            </Flex>
+          )}
+          {enable.difficulty && (
+            <Flex {...enableChartStyle} flexDirection="column">
+              <Box>
+                <ContributeByDifficulty
+                  Difficulty={additionChart.difficultyChart}
+                  error={error as FetchBaseQueryError}
+                  isError={isError}
+                  isLoading={isLoading}
+                />
+              </Box>
+              <Text {...chartTitleStyle}>
+                THE CONTRIBUTION BY PROJECT Difficulty
+              </Text>
+            </Flex>
+          )}
+        </Flex>
         <Menu closeOnSelect={false}>
           <MenuButton
+            position={"absolute"}
+            zIndex={2}
+            top={605}
             as={IconButton}
             icon={<HamburgerIcon />}
             {...menuButtonStyle}
@@ -151,8 +223,8 @@ const Dashboard = () => {
             </MenuItem>
             <MenuItem pl={"20px"}>
               <FormControl {...formControlStyle}>
-                <FormLabel htmlFor="location" mb="0">
-                  Project location
+                <FormLabel htmlFor="locate" mb="0">
+                  Project Location
                 </FormLabel>
                 <Switch
                   id="locate"
@@ -176,7 +248,7 @@ const Dashboard = () => {
             <MenuItem pl={"20px"}>
               <FormControl {...formControlStyle}>
                 <FormLabel htmlFor="difficulty" mb="0">
-                  Project difficulty
+                  Project Difficulty
                 </FormLabel>
                 <Switch
                   id="difficulty"
@@ -187,109 +259,6 @@ const Dashboard = () => {
             </MenuItem>
           </MenuList>
         </Menu>
-
-        <Flex
-          justify={"space-between"}
-          align={"center"}
-          gap={"40px"}
-          ml={"20px"}
-          mr={"20px"}
-          flexWrap={"wrap"}
-          mt={"20px"}
-        >
-          <Box
-            w={"100%"}
-            bg={"#08040459"}
-            borderRadius={"20px"}
-            minH={"515px"}
-            position={"relative"}
-            onContextMenu={handleContextMenu}
-          >
-            <TotalProjectChart
-              orderBy={orderBy === "" ? "startDate" : orderBy}
-            />
-            <Menu closeOnSelect={false}>
-              <MenuButton
-                {...menuButtonStyle}
-                as={Button}
-                border={"1px solid #fff"}
-                borderRadius={"15px"}
-                padding={"5px"}
-                h={"30px"}
-                position={"absolute"}
-                bottom={"10px"}
-                left={"-10px"}
-              >
-                Choose
-              </MenuButton>
-
-              <MenuList maxW={"1000px"}>
-                <MenuItem>
-                  <Text fontSize={"16px"} fontWeight={"bold"}>
-                    Choose the projects you want to display
-                  </Text>
-                </MenuItem>
-                <ChooseProjects />
-              </MenuList>
-            </Menu>
-            <Select
-              position="absolute"
-              onChange={handlleSelect}
-              {...selectStyle}
-            >
-              <option value="startDate">Newest</option>
-              <option value="startDate desc">Oldest</option>
-            </Select>
-          </Box>
-          {enable.locate && (
-            <Flex {...enableChartStyle} flexDirection="column">
-              <Box>
-                <ContributeLocation
-                  location={additionChart.locateChart}
-                  error={error as FetchBaseQueryError}
-                  isError={isError}
-                  isLoading={isLoading}
-                />
-              </Box>
-              <Text {...chartTitleStyle}>THE CONTRIBUTION BY LOCATION</Text>
-            </Flex>
-          )}
-          {enable.size && (
-            <Flex {...enableChartStyle} flexDirection="column">
-              <Box>
-                <ContributeBySize
-                  size={additionChart.sizeChart}
-                  error={error as FetchBaseQueryError}
-                  isError={isError}
-                  isLoading={isLoading}
-                />
-              </Box>
-              <Text {...chartTitleStyle}>THE CONTRIBUTION BY PROJECT SIZE</Text>
-            </Flex>
-          )}
-          {enable.difficulty && (
-            <Flex {...enableChartStyle} flexDirection="column">
-              <Box>
-                <ContributeByDifficulty
-                  difficulty={additionChart.difficultyChart}
-                  error={error as FetchBaseQueryError}
-                  isError={isError}
-                  isLoading={isLoading}
-                />
-              </Box>
-              <Text {...chartTitleStyle}>
-                THE CONTRIBUTION BY PROJECT DIFFICULTY
-              </Text>
-            </Flex>
-          )}
-        </Flex>
-        <Flex
-          justify={"space-between"}
-          align={"center"}
-          gap={"40px"}
-          ml={"20px"}
-          mr={"20px"}
-        ></Flex>
         <StatsOverall />
         <TableMore />
       </Box>

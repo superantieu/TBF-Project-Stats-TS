@@ -1,8 +1,8 @@
 export interface ICompletedProject {
   project: string;
-  startDate: number;
-  targetDate: number;
-  completedDate: number;
+  StartDate: number;
+  TargetDate: number;
+  CompletedDate: number;
   members: number;
   used: number;
   target: number;

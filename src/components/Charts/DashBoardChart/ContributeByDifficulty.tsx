@@ -1,32 +1,25 @@
 import { useEffect } from "react";
 import { useToast } from "@chakra-ui/react";
 
+import countToChartData from "../../../utility/countToChartData";
 import { RTKQueryProps } from "../../../interfaces/rtkQueryAPI.interface";
 
 import ContributeChart from "../ProjectDetailChart/ContributeChart";
 import LoadingPage from "../../../pages/LoadingPage";
 
 type ContributeByDifficultyProps = RTKQueryProps & {
-  difficulty: string[];
+  Difficulty: string[];
 };
 const ContributeByDifficulty: React.FC<ContributeByDifficultyProps> = ({
-  difficulty,
+  Difficulty,
   error,
   isError,
   isLoading,
 }) => {
   const toast = useToast();
 
-  let countDiffi: { [key: string]: number } = {};
+  const countDiffi = countToChartData(Difficulty);
 
-  difficulty.forEach((loca) => {
-    if (countDiffi[loca]) {
-      countDiffi[loca]++;
-    } else {
-      countDiffi[loca] = 1;
-    }
-    return countDiffi;
-  });
   useEffect(() => {
     if (isError) {
       toast({

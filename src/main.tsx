@@ -64,7 +64,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/discipline/:name",
+        path: "/Discipline/:name",
         element: (
           <Suspense>
             <TeamProject />

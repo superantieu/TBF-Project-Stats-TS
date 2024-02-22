@@ -1,11 +1,11 @@
-import { ColumnDefExtended } from "../components/Dashboard/TableWithMore";
+import { ColumnDefExtended } from "../components/Dashboard/SubComponent/TableWithMore";
 import { IProjectResult } from "./projectResult.interface";
 
 export interface Paginitation {
   currentPage: number;
   hasNext: boolean;
   hasPrevious: boolean;
-  pageSize: number;
+  pagesize: number;
   totalCount: number;
   totalPages: number;
 }

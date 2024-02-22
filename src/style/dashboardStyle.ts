@@ -18,6 +18,7 @@ export const formControlStyle = {
 };
 
 export const menuButtonStyle = {
+  borderRadius: "12px",
   "aria-label": "Options",
   variant: "outline",
   color: "#fff",

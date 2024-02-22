@@ -1,7 +1,7 @@
 import { Stack, Text, Box, Flex } from "@chakra-ui/react";
 import { ReactElement } from "react";
 
-import { flexStyle } from "../../style/projectDetailStyle";
+import { flexStyle } from "../../../style/projectDetailStyle";
 
 interface InforInsideDetailProps {
   text: string;

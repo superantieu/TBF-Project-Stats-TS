@@ -39,18 +39,18 @@ const ExpectTimeChart: React.FC<ExpectTimeChartProps> = ({ data }) => {
 
   data.map((obj) => {
     targ.push({
-      x: obj.projectName,
+      x: obj.ProjectName,
       y: Math.round(
-        (new Date(obj.targetDate).getTime() -
-          new Date(obj.startDate).getTime()) /
+        (new Date(obj.TargetDate).getTime() -
+          new Date(obj.StartDate).getTime()) /
           (1000 * 24 * 3660)
       ),
       goals: [
         {
           name: "Actual Time",
           value: Math.round(
-            (new Date(obj.completedDate).getTime() -
-              new Date(obj.startDate).getTime()) /
+            (new Date(obj.CompletedDate).getTime() -
+              new Date(obj.StartDate).getTime()) /
               (1000 * 24 * 3660)
           ),
           strokeHeight: 6,
@@ -59,16 +59,16 @@ const ExpectTimeChart: React.FC<ExpectTimeChartProps> = ({ data }) => {
       ],
     });
     overTarg.push({
-      x: obj.projectName,
+      x: obj.ProjectName,
       y:
         Math.round(
-          (new Date(obj.completedDate).getTime() -
-            new Date(obj.targetDate).getTime()) /
+          (new Date(obj.CompletedDate).getTime() -
+            new Date(obj.TargetDate).getTime()) /
             (1000 * 24 * 3660)
         ) > 0
           ? Math.round(
-              (new Date(obj.completedDate).getTime() -
-                new Date(obj.targetDate).getTime()) /
+              (new Date(obj.CompletedDate).getTime() -
+                new Date(obj.TargetDate).getTime()) /
                 (1000 * 24 * 3660)
             )
           : 0,
@@ -98,8 +98,8 @@ const ExpectTimeChart: React.FC<ExpectTimeChartProps> = ({ data }) => {
       events: {
         dataPointSelection: (event: any, chart, config: any) => {
           if (event.button === 2) {
-            const wantDirect = data[config.dataPointIndex]["projectId"];
-            const wantName = data[config.dataPointIndex]["projectName"];
+            const wantDirect = data[config.dataPointIndex]["ProjectId"];
+            const wantName = data[config.dataPointIndex]["ProjectName"];
             setDirect(wantDirect);
             setName(wantName);
             onOpen();

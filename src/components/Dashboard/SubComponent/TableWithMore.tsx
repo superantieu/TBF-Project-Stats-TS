@@ -3,12 +3,12 @@ import { Box, Text, useToast } from "@chakra-ui/react";
 import { ColumnDef } from "@tanstack/react-table";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
-import { useGetOngoingProjectQuery } from "../../services/ongoingApi";
-import { ICompletedProject } from "../../interfaces/projectTable.interface";
-import { IProjectResult } from "../../interfaces/projectResult.interface";
+import { useGetOngoingProjectQuery } from "../../../services/ongoingApi";
+import { ICompletedProject } from "../../../interfaces/projectTable.interface";
+import { IProjectResult } from "../../../interfaces/projectResult.interface";
 
-import TableWithPagination from "../Tables/CompletedTable";
-import LoadingPage from "../../pages/LoadingPage";
+import TableWithPagination from "../../Tables/CompletedTable";
+import LoadingPage from "../../../pages/LoadingPage";
 
 export type ColumnDefExtended<T> = ColumnDef<T, unknown> & { width: string };
 
@@ -22,10 +22,9 @@ const TableMore = () => {
     isLoading,
   } = useGetOngoingProjectQuery({
     pageNumber: page,
-    Completed: true,
+    isCompleted: 1,
     pageSize: 10,
   });
-
   const columns = useMemo<ColumnDefExtended<ICompletedProject>[]>(
     () => [
       {
@@ -40,8 +39,8 @@ const TableMore = () => {
         width: "240px",
       },
       {
-        id: "startDate",
-        accessorKey: "startDate",
+        id: "StartDate",
+        accessorKey: "StartDate",
         cell: ({ getValue }) => (
           <Text noOfLines={1} display={"block"}>
             {new Date(getValue() as string).toLocaleDateString("en-US", {
@@ -55,8 +54,8 @@ const TableMore = () => {
         width: "150px",
       },
       {
-        id: "targetDate",
-        accessorKey: "targetDate",
+        id: "TargetDate",
+        accessorKey: "TargetDate",
         cell: ({ getValue }) => (
           <Text noOfLines={1} display={"block"}>
             {new Date(getValue() as string).toLocaleDateString("en-US", {
@@ -70,8 +69,8 @@ const TableMore = () => {
         width: "150px",
       },
       {
-        id: "completedDate",
-        accessorKey: "completedDate",
+        id: "CompletedDate",
+        accessorKey: "CompletedDate",
         cell: ({ getValue }) => (
           <Text noOfLines={1} display={"block"}>
             {new Date(getValue() as string).toLocaleDateString("en-US", {
@@ -125,16 +124,13 @@ const TableMore = () => {
 
   data = completedProjects?.result.map((complete: IProjectResult) => {
     return {
-      project: complete.projectName,
-      startDate: new Date(complete.startDate).getTime(),
-      targetDate: new Date(complete.targetDate).getTime(),
-      completedDate: new Date(complete.completedDate).getTime(),
-      members:
-        (complete.listmember.match(/\([^)]+\)/g) || []).length +
-        (complete.listLeader.match(/\([^)]+\)/g) || []).length +
-        (complete.listManager.match(/\([^)]+\)/g) || []).length,
-      used: complete.usedHours,
-      target: complete.totalHours,
+      project: complete.ProjectName,
+      StartDate: new Date(complete.StartDate).getTime(),
+      TargetDate: new Date(complete.TargetDate).getTime(),
+      CompletedDate: new Date(complete.CompletedDate).getTime(),
+      members: complete.FilterMembers.length,
+      used: complete.UsedHours,
+      target: complete.TotalHours,
     };
   });
 
@@ -157,10 +153,10 @@ const TableMore = () => {
       <TableWithPagination
         columns={columns}
         data={data}
-        current={completedProjects.pagination.currentPage}
-        pageCount={completedProjects.pagination.totalPages}
+        current={completedProjects?.pagination.currentPage}
+        pageCount={completedProjects?.pagination.totalPages}
         setCurrent={setPage}
-        chartData={completedProjects.result}
+        chartData={completedProjects?.result}
       />
     </Box>
   );

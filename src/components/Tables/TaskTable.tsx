@@ -14,8 +14,10 @@ import RenderThumb from "../../scrollbar/RenderThumb";
 
 interface TaskTableProps {
   data: { taskName: string; taskHour: number }[];
+  name: string;
+  hour: string;
 }
-const TaskTable: React.FC<TaskTableProps> = ({ data }) => {
+const TaskTable: React.FC<TaskTableProps> = ({ data, name, hour }) => {
   return (
     <Flex
       h="400px"
@@ -30,10 +32,10 @@ const TaskTable: React.FC<TaskTableProps> = ({ data }) => {
           <Thead>
             <Tr>
               <Th px="8px" color={"red.400"} w={"300px"}>
-                Task Name
+                {name}
               </Th>
               <Th px="8px" color={"red.400"}>
-                Task Hour
+                {hour}
               </Th>
             </Tr>
           </Thead>

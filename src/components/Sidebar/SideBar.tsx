@@ -10,7 +10,7 @@ import {
 import arrayNameRoute from "../../app/arrayNameRoute";
 
 const SideBar = () => {
-  const location = useLocation();
+  const Location = useLocation();
 
   return (
     <Stack
@@ -49,7 +49,7 @@ const SideBar = () => {
                   color: "white",
                   boxShadow: "none",
                 }}
-                isActive={location.pathname === rou.path}
+                isActive={Location.pathname === rou.path}
               >
                 <Flex>
                   <Text my="auto" fontSize="sm">

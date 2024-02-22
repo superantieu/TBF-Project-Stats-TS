@@ -4,10 +4,10 @@ import { Flex, Link as SupLink, Text, useToast } from "@chakra-ui/react";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { FetchBaseQueryError, skipToken } from "@reduxjs/toolkit/query";
 
-import { useGetSearchProjectQuery } from "../../services/ongoingApi";
-import { DIRECT_OPTION } from "../../constants/page-direct";
+import { useGetSearchProjectQuery } from "../../../services/ongoingApi";
+import { DIRECT_OPTION } from "../../../constants/page-direct";
 
-import LoadingPage from "../../pages/LoadingPage";
+import LoadingPage from "../../../pages/LoadingPage";
 
 interface SearchTableProps {
   searchValue: string;
@@ -26,12 +26,11 @@ const SearchTable: React.FC<SearchTableProps> = ({ searchValue, type }) => {
     searchValue
       ? {
           type: type,
-          SearchTerm: searchValue,
-          pageSize: 10,
+          searchTerm: searchValue,
+          // pageSize: 10,
         }
       : skipToken
   );
-
   useMemo(() => {
     if (searchProjects?.result && searchValue) {
       setRenderValue(searchProjects.result);
@@ -51,7 +50,7 @@ const SearchTable: React.FC<SearchTableProps> = ({ searchValue, type }) => {
       });
     }
   }, [isError]);
-
+  console.log("dis", searchProjects?.result);
   if (isLoading) {
     return (
       <Scrollbars

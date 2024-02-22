@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useToast } from "@chakra-ui/react";
 
 import { useGetTaskQuery } from "../../../services/ongoingApi";
-import { DataForRender } from "../../CompletedProjects/ProjectDetail";
+import { DataForRender } from "../../CompletedProjects/SubComponent/ProjectDetail";
 import { contributeOptionStyle } from "../../../style/chartStyle";
 
 import TaskTable from "../../Tables/TaskTable";
@@ -15,13 +15,13 @@ interface ContributeByTaskProps {
 }
 const ContributeByTask: React.FC<ContributeByTaskProps> = ({ taskhour }) => {
   const toast = useToast();
-  const taskName = Object.keys(taskhour).map((taskId) => {
+  const taskName = Object.keys(taskhour).map((TaskId) => {
     const {
       data: taskData,
       error,
       isError,
       isLoading,
-    } = useGetTaskQuery(taskId);
+    } = useGetTaskQuery(TaskId);
     useEffect(() => {
       if (isError) {
         toast({
@@ -35,11 +35,11 @@ const ContributeByTask: React.FC<ContributeByTaskProps> = ({ taskhour }) => {
     }, [isError]);
 
     if (isLoading) {
-      return taskId;
+      return TaskId;
     }
-    return taskData.result.name;
+    console.log("task", taskData);
+    return taskData.result[0].Name;
   });
-
   const series: ApexAxisChartSeries = [
     { name: "Work", data: Object.values(taskhour) },
   ];
@@ -52,7 +52,7 @@ const ContributeByTask: React.FC<ContributeByTaskProps> = ({ taskhour }) => {
     const data = Object.values(taskhour).map((value, index) => {
       return { taskName: taskName[index], taskHour: value };
     });
-    return <TaskTable data={data} />;
+    return <TaskTable data={data} name={"Task Name"} hour={"Task Hour"} />;
   }
 
   return (
