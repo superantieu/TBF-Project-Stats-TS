@@ -135,6 +135,7 @@ export const contributeOptionStyle = (categories: string[]) => {
       },
       labels: {
         show: true,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         formatter: function (val: any) {
           return val;
         },

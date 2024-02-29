@@ -1,5 +1,5 @@
 const countToChartData = (arrayToCount: string[]) => {
-  let countSth: { [key: string]: number } = {};
+  const countSth: { [key: string]: number } = {};
 
   arrayToCount.forEach((loca) => {
     if (countSth[loca]) {

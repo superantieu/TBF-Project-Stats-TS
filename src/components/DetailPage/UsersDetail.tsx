@@ -140,6 +140,7 @@ const UserDetail = () => {
         duration: 2500,
         position: "top-right",
         title: "ABC",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         description: ((userError as FetchBaseQueryError)?.data as any)?.title,
       });
     }
@@ -149,10 +150,11 @@ const UserDetail = () => {
         duration: 2500,
         position: "top-right",
         title: "ABC",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         description: ((error as FetchBaseQueryError)?.data as any)?.title,
       });
     }
-  }, [isError, isProjectError]);
+  }, [isError, isProjectError, error, toast, userError]);
 
   if (isLoading || userLoading) {
     data = [];

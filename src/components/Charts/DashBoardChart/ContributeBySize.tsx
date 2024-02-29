@@ -28,10 +28,11 @@ const ContributeBySize: React.FC<ContributeBysizeProps> = ({
         duration: 2500,
         position: "top-right",
         title: "Oops!",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         description: (error?.data as any)?.title,
       });
     }
-  }, [isError]);
+  }, [isError, error?.data, toast]);
 
   if (isLoading) {
     return <LoadingPage />;

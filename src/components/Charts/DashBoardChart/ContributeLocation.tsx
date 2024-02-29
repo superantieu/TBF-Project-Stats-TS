@@ -21,8 +21,8 @@ const ContributeLocation: React.FC<ContributeLocationProps> = ({
 
   const countLoca = countToChartData(Location);
   let otherCount = 0;
-  for (var key in countLoca) {
-    if (countLoca.hasOwnProperty(key)) {
+  for (const key in countLoca) {
+    if (Object.prototype.hasOwnProperty.call(countLoca, key)) {
       if (key === "" || countLoca[key] === 1) {
         otherCount += countLoca[key];
         delete countLoca[key];
@@ -40,10 +40,11 @@ const ContributeLocation: React.FC<ContributeLocationProps> = ({
         duration: 2500,
         position: "top-right",
         title: "Oops!",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         description: (error?.data as any)?.title,
       });
     }
-  }, [isError]);
+  }, [isError, error?.data, toast]);
 
   if (isLoading) {
     return <LoadingPage />;

@@ -13,33 +13,42 @@ import TaskTable from "../../Tables/TaskTable";
 interface ContributeByTaskProps {
   taskhour: DataForRender;
 }
-const ContributeByTask: React.FC<ContributeByTaskProps> = ({ taskhour }) => {
+
+const useTaskData = (TaskId: string) => {
   const toast = useToast();
+  const { data: taskData, error, isError, isLoading } = useGetTaskQuery(TaskId);
+
+  useEffect(() => {
+    if (isError) {
+      toast({
+        status: "error",
+        duration: 2500,
+        position: "top-right",
+        title: "ABC",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        description: ((error as FetchBaseQueryError)?.data as any)?.title,
+      });
+    }
+  }, [isError, error, toast]);
+
+  return { taskData, isLoading };
+};
+
+const ContributeByTask: React.FC<ContributeByTaskProps> = ({ taskhour }) => {
+  // const toast = useToast();
+
   const taskName = Object.keys(taskhour).map((TaskId) => {
-    const {
-      data: taskData,
-      error,
-      isError,
-      isLoading,
-    } = useGetTaskQuery(TaskId);
-    useEffect(() => {
-      if (isError) {
-        toast({
-          status: "error",
-          duration: 2500,
-          position: "top-right",
-          title: "ABC",
-          description: ((error as FetchBaseQueryError)?.data as any)?.title,
-        });
-      }
-    }, [isError]);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { taskData, isLoading } = useTaskData(TaskId);
 
     if (isLoading) {
       return TaskId;
     }
+
     console.log("task", taskData);
     return taskData.result[0].Name;
   });
+
   const series: ApexAxisChartSeries = [
     { name: "Work", data: Object.values(taskhour) },
   ];
@@ -59,4 +68,5 @@ const ContributeByTask: React.FC<ContributeByTaskProps> = ({ taskhour }) => {
     <ReactApexChart options={options} series={series} type="bar" height={350} />
   );
 };
+
 export default ContributeByTask;

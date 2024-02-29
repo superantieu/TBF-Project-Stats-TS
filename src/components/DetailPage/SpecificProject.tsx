@@ -29,10 +29,11 @@ const SpecificProject = () => {
         duration: 2500,
         position: "top-right",
         title: "ABC",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         description: ((error as FetchBaseQueryError)?.data as any)?.title,
       });
     }
-  }, [isError]);
+  }, [isError, error, toast]);
 
   if (isLoading) {
     return <LoadingPage />;

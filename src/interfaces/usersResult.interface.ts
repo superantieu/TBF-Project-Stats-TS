@@ -3,5 +3,5 @@ export interface IUsersResult {
   FullName: string;
   Discipline: string;
   JobTitle: string;
-  UserHours: any;
+  UserHours: number;
 }

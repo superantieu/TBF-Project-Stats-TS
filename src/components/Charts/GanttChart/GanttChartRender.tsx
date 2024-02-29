@@ -117,10 +117,11 @@ const GanttChartRender = () => {
         duration: 2500,
         position: "top-right",
         title: "ABC",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         description: ((error as FetchBaseQueryError)?.data as any)?.title,
       });
     }
-  }, [isError]);
+  }, [isError, error, toast]);
 
   if (isLoading) {
     return <LoadingPage />;
@@ -150,7 +151,7 @@ const GanttChartRender = () => {
           columnWidth={columnWidth}
           // barProgressColor={"#f56565"}
           barProgressColor={"red"}
-          // @ts-ignore
+          // @ts-expect-error: customize tooltip
           TooltipContent={CustomizeTooltip}
           TaskListTable={TaskListTable}
           TaskListHeader={TaskListHeader}

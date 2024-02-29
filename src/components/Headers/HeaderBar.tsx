@@ -22,8 +22,8 @@ const HeaderBar = () => {
   const [focus, setFocus] = useState(false);
   const ref = useRef<HTMLInputElement | null>(null);
   const [inputValue, setInputValue] = useState("");
-  // const [type, setType] = useState("project/specific/selectproject");
-  const [type, setType] = useState("project");
+  const [type, setType] = useState("project/specific/selectproject");
+  // const [type, setType] = useState("project");
 
   const handlleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setType(e.target.value);
@@ -76,12 +76,12 @@ const HeaderBar = () => {
             bgColor={"transparent"}
             className="selectbox"
           >
-            {/* <option value="project/specific/selectproject">Project</option> */}
-            <option value="project">Project</option>
-            {/* <option value="employee">Member</option> */}
-            <option value="users">Member</option>
-            {/* <option value="task/task/discipline">Discipline</option> */}
-            <option value="task/discipline/search">Discipline</option>
+            <option value="project/specific/selectproject">Project</option>
+            {/* <option value="project">Project</option> */}
+            <option value="employee/stats">Member</option>
+            {/* <option value="users">Member</option> */}
+            <option value="task/task/discipline">Discipline</option>
+            {/* <option value="task/discipline/search">Discipline</option> */}
           </Select>
         </Flex>
         <InputGroup

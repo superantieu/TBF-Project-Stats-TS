@@ -119,7 +119,7 @@ const TotalProjectChart: React.FC<TotalProjectChartProps> = ({
       width: 300,
       type: "bar",
       events: {
-        dataPointSelection: (event, chart, options) => {
+        dataPointSelection: (event, _chart, options) => {
           if (event.button === 2) {
             const wantDirect =
               ongoProjects.result[options.dataPointIndex]["ProjectId"];
@@ -163,7 +163,6 @@ const TotalProjectChart: React.FC<TotalProjectChartProps> = ({
         opposite: true,
         ...yAxisStyleFc("Target Hours", "#de7818"),
       },
-      ,
     ] as ApexYAxis,
     fill: {
       opacity: 1,
@@ -200,10 +199,11 @@ const TotalProjectChart: React.FC<TotalProjectChartProps> = ({
         duration: 2500,
         position: "top-right",
         title: "ABC",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         description: ((error as FetchBaseQueryError)?.data as any)?.title,
       });
     }
-  }, [isError]);
+  }, [isError, error, toast]);
   if (isLoading) {
     return <LoadingPage />;
   }

@@ -30,7 +30,7 @@ const StatsOverall = () => {
     pageSize: 500,
     employed: 1,
   });
-
+  console.log("user", users?.result);
   const statsOverAllProject: StatsOverAllProject = useMemo(() => {
     if (users?.result) {
       let manage: number = 0;
@@ -89,10 +89,11 @@ const StatsOverall = () => {
         duration: 2500,
         position: "top-right",
         title: "ABC",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         description: ((error as FetchBaseQueryError)?.data as any)?.title,
       });
     }
-  }, [isError]);
+  }, [isError, error, toast]);
   if (isLoading) {
     return <LoadingPage />;
   }

@@ -55,7 +55,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
   });
   const chartData: ChartData = useMemo(() => {
     if (timeSheetData?.result) {
-      let TSHour: DataForRender = {},
+      const TSHour: DataForRender = {},
         tstas: DataForRender = {},
         tsperso: DataForRender = {},
         team: { [key: string]: string[] } = {};
@@ -87,7 +87,7 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
       tsperson: {},
       teams: {},
     };
-  }, [project, timeSheetData?.result]);
+  }, [timeSheetData?.result]);
 
   const handleSelectChart = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.target.value === "team"
@@ -104,10 +104,11 @@ const ProjectDetail: React.FC<ProjectDetailProps> = ({ project }) => {
         duration: 2500,
         position: "top-right",
         title: "ABC",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         description: ((error as FetchBaseQueryError)?.data as any)?.title,
       });
     }
-  }, [isError]);
+  }, [isError, error, toast]);
 
   return (
     <Box>

@@ -68,7 +68,7 @@ const TaskTable: React.FC<TaskTableProps> = ({ data, name, hour }) => {
               </Tr>
             </Thead>
             <Tbody>
-              {data.map((dt: any, index) => {
+              {data.map((dt, index) => {
                 return (
                   <Tr key={index}>
                     <Td

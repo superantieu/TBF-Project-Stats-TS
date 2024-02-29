@@ -1,6 +1,6 @@
 import { Flex, Text, Divider } from "@chakra-ui/react";
 
-const TaskListHeader = ({}) => {
+const TaskListHeader = () => {
   return (
     <Flex
       align={"center"}

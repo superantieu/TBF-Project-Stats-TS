@@ -1,6 +1,6 @@
 import { Stack, Text } from "@chakra-ui/react";
 
-import { TasksExtended } from "../TestGantt";
+import { TasksExtended } from "../../Charts/GanttChart/GanttChartRender";
 
 interface CustomizeTooltipProps {
   task: TasksExtended;

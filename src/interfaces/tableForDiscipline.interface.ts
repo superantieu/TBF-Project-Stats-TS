@@ -1,5 +1,6 @@
 import { ColumnDefExtended } from "../components/Dashboard/SubComponent/TableWithMore";
 import { IProjectResult } from "./projectResult.interface";
+import { ICompletedProject } from "./projectTable.interface";
 
 export interface Paginitation {
   currentPage: number;
@@ -11,8 +12,8 @@ export interface Paginitation {
 }
 
 export interface TableForDisciplineProps {
-  columns: ColumnDefExtended<any>[];
-  data: { [key: string]: any }[];
+  columns: ColumnDefExtended<ICompletedProject>[];
+  data: ICompletedProject[];
   project: {
     isSuccess: boolean;
     message: string;

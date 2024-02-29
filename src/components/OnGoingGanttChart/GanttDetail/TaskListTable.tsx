@@ -5,7 +5,7 @@ import { Task } from "gantt-task-react";
 type TaskListTableProps = {
   tasks: Task[];
   locale: string;
-  onExpanderClick: any;
+  // onExpanderClick: any;
 };
 const localeDateStringCache: { [key: string]: string } = {};
 const toLocaleDateStringFactory =
@@ -28,7 +28,7 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = {
 const TaskListTable: React.FC<TaskListTableProps> = ({
   tasks,
   locale,
-  onExpanderClick,
+  // onExpanderClick,
 }) => {
   const toLocaleDateString = useMemo(
     () => toLocaleDateStringFactory(locale),
@@ -68,7 +68,7 @@ const TaskListTable: React.FC<TaskListTableProps> = ({
                     padding={
                       expanderSymbol ? "0.15rem 0.2rem 0rem 0.2rem" : "1rem"
                     }
-                    onClick={() => onExpanderClick(t)}
+                    // onClick={() => onExpanderClick(t)}
                   >
                     {expanderSymbol}
                   </Box>

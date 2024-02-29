@@ -15,6 +15,7 @@ import BasicModal from "../../Modal/BasicModel";
 type Target = {
   x: string;
   y: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   goals: any[];
 };
 type Overtarget = {
@@ -96,7 +97,7 @@ const ExpectTimeChart: React.FC<ExpectTimeChartProps> = ({ data }) => {
       stacked: true,
       type: "bar",
       events: {
-        dataPointSelection: (event: any, chart, config: any) => {
+        dataPointSelection: (event, _chart, config) => {
           if (event.button === 2) {
             const wantDirect = data[config.dataPointIndex]["ProjectId"];
             const wantName = data[config.dataPointIndex]["ProjectName"];

@@ -2,7 +2,7 @@ import { CSSProperties } from "react";
 
 interface RenderThumbProps {
   style: CSSProperties;
-  [key: string]: any;
+  // [key: string]: any;
 }
 
 const RenderThumb: React.FC<RenderThumbProps> = ({ style, ...props }) => {
